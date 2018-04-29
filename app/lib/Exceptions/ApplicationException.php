@@ -1,13 +1,13 @@
 <?php
 /** ---------------------------------------------------------------------
- * app/lib/Controller/ApplicationException.php :
+ * app/lib/Exceptions/ApplicationException.php :
  * ----------------------------------------------------------------------
  * CollectiveAccess
  * Open-source collections management software
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2015 Whirl-i-Gig
+ * Copyright 2015-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -35,6 +35,6 @@
  */
 
 
-class ApplicationException extends Exception {
-
+class ApplicationException extends Exception { 
+	
 }

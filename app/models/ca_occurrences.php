@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2008-2016 Whirl-i-Gig
+ * Copyright 2008-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -311,8 +311,9 @@ class ca_occurrences extends BaseObjectLocationModel implements IBundleProvider 
 	# ------------------------------------------------------
 	# $FIELDS contains information about each field in the table. The order in which the fields
 	# are listed here is the order in which they will be returned using getFields()
-
 	protected $FIELDS;
+	
+	use CommentableModelTrait;
 	
 	# ------------------------------------------------------
 	# --- Constructor

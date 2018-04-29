@@ -278,8 +278,9 @@ class ca_users extends BaseModel {
 	# ------------------------------------------------------
 	# $FIELDS contains information about each field in the table. The order in which the fields
 	# are listed here is the order in which they will be returned using getFields()
-
 	protected $FIELDS;
+	
+	use RelatableModelTrait;
 	
 	/**
 	 * authentication configuration

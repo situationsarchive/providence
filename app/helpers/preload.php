@@ -37,6 +37,7 @@ require_once(__CA_APP_DIR__."/helpers/errorHelpers.php");
 require_once(__CA_BASE_DIR__.'/vendor/autoload.php');	// composer
 
 
+include_once(__CA_LIB_DIR__."/Exceptions/ApplicationException.php");
 require_once(__CA_LIB_DIR__."/Zend/Translate.php");
 require_once(__CA_LIB_DIR__."/Zend/Cache.php");
 require_once(__CA_LIB_DIR__."/Cache/MemoryCache.php"); // is used in utilityHelpers

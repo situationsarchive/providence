@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2008-2016 Whirl-i-Gig
+ * Copyright 2008-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -200,8 +200,7 @@ BaseModel::$s_ca_models_definitions['ca_places'] = array(
  	)
 );
 
-class ca_places extends RepresentableBaseModel implements IBundleProvider, IHierarchy {
-	
+class ca_places extends RepresentableBaseModel implements IBundleProvider, IHierarchy {	
 	use MediaModelTrait;
 
 	# ------------------------------------------------------
@@ -327,8 +326,10 @@ class ca_places extends RepresentableBaseModel implements IBundleProvider, IHier
 	# ------------------------------------------------------
 	# $FIELDS contains information about each field in the table. The order in which the fields
 	# are listed here is the order in which they will be returned using getFields()
-
 	protected $FIELDS;
+	
+	use CommentableModelTrait;
+	use RelatableModelTrait;
 	
 	# ------------------------------------------------------
 	# --- Constructor

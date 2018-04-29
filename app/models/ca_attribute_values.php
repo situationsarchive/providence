@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2008-2017 Whirl-i-Gig
+ * Copyright 2008-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -38,6 +38,7 @@ require_once(__CA_LIB_DIR__.'/Attributes/Attribute.php');
 require_once(__CA_MODELS_DIR__.'/ca_attribute_value_multifiles.php');
 require_once(__CA_LIB_DIR__."/SyncableBaseModel.php");
 require_once(__CA_LIB_DIR__."/MediaModelTrait.php");
+require_once(__CA_LIB_DIR__."/FileModelTrait.php");
 
 
 BaseModel::$s_ca_models_definitions['ca_attribute_values'] = array(
@@ -214,8 +215,9 @@ class ca_attribute_values extends BaseModel {
 	# ------------------------------------------------------
 	# $FIELDS contains information about each field in the table. The order in which the fields
 	# are listed here is the order in which they will be returned using getFields()
-
 	protected $FIELDS;
+	
+	use FileModelTrait;
 	
 	# ------------------------------------------------------
 	# --- Constructor
@@ -266,7 +268,7 @@ class ca_attribute_values extends BaseModel {
 		
 		if ($this->inTransaction()) { $pa_options['transaction'] = $this->getTransaction(); }
 		
-$this->set('attribute_id', $pn_attribute_id);
+		$this->set('attribute_id', $pn_attribute_id);
 		$this->set('element_id', $pa_element_info['element_id']);
 		
 		$o_attr_value = Attribute::getValueInstance($pa_element_info['datatype']);

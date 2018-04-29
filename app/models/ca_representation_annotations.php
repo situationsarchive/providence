@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2009-2013 Whirl-i-Gig
+ * Copyright 2009-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -267,8 +267,10 @@ class ca_representation_annotations extends BundlableLabelableBaseModelWithAttri
 	# ------------------------------------------------------
 	# $FIELDS contains information about each field in the table. The order in which the fields
 	# are listed here is the order in which they will be returned using getFields()
-
 	protected $FIELDS;
+	
+	use CommentableModelTrait;
+	use RelatableModelTrait;
 	
 	# ------------------------------------------------------
 	# --- Constructor

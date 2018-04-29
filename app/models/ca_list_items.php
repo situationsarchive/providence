@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2008-2015 Whirl-i-Gig
+ * Copyright 2008-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -518,9 +518,9 @@ class ca_list_items extends RepresentableBaseModel implements IHierarchy {
 	# ------------------------------------------------------
 	# $FIELDS contains information about each field in the table. The order in which the fields
 	# are listed here is the order in which they will be returned using getFields()
-
 	protected $FIELDS;
 	
+	use RelatableModelTrait;
 	
 	/**
 	 * Settings delegate - implements methods for setting, getting and using 'settings' var field
@@ -632,7 +632,7 @@ class ca_list_items extends RepresentableBaseModel implements IHierarchy {
 				// create root in ca_places
 				$t_place = new ca_places();
 				$t_place->setTransaction($o_trans);
-$t_place->set('hierarchy_id', $this->getPrimaryKey());
+				$t_place->set('hierarchy_id', $this->getPrimaryKey());
 				$t_place->set('locale_id', $vn_locale_id);
 				$t_place->set('type_id', null);
 				$t_place->set('parent_id', null);

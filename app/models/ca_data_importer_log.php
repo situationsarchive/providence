@@ -7,7 +7,7 @@
  * ----------------------------------------------------------------------
  *
  * Software by Whirl-i-Gig (http://www.whirl-i-gig.com)
- * Copyright 2013 Whirl-i-Gig
+ * Copyright 2013-2018 Whirl-i-Gig
  *
  * For more information visit http://www.CollectiveAccess.org
  *
@@ -34,9 +34,10 @@
    *
    */
 
-	require_once(__CA_LIB_DIR__.'/Datamodel.php');
-	require_once(__CA_MODELS_DIR__.'/ca_data_import_event_log.php');
-	require_once(__CA_MODELS_DIR__.'/ca_data_import_items.php');
+require_once(__CA_LIB_DIR__.'/Datamodel.php');
+require_once(__CA_MODELS_DIR__.'/ca_data_import_event_log.php');
+require_once(__CA_MODELS_DIR__.'/ca_data_import_items.php');
+require_once(__CA_LIB_DIR__."/FileModelTrait.php");
 
 /**
   * Constants for data import items (ca_data_import_items) "success" flag
@@ -186,8 +187,8 @@ class ca_data_importer_log extends BaseModel {
 	# ------------------------------------------------------
 	# $FIELDS contains information about each field in the table. The order in which the fields
 	# are listed here is the order in which they will be returned using getFields()
-
 	protected $FIELDS;
+	use FileModelTrait;
 	
 	protected $opo_data_import_item;
 	
@@ -217,7 +218,7 @@ class ca_data_importer_log extends BaseModel {
 	  */
 	static public function newEvent($pn_user_id, $ps_type, $ps_source, $ps_description) {
 		$o_instance = new ca_data_importer_log();
-$o_instance->set('user_id', $pn_user_id);
+		$o_instance->set('user_id', $pn_user_id);
 		$o_instance->set('type_code', $ps_type);
 		$o_instance->set('source', $ps_source);
 		$o_instance->set('description', $ps_description);

@@ -48,6 +48,7 @@ require_once(__CA_LIB_DIR__.'/Logging/KLogger/KLogger.php');
 require_once(__CA_LIB_DIR__.'/Parsers/ExpressionParser.php');
 require_once(__CA_LIB_DIR__."/ApplicationPluginManager.php");
 require_once(__CA_LIB_DIR__.'/Db/Transaction.php');
+require_once(__CA_LIB_DIR__."/FileModelTrait.php");
 
 
 BaseModel::$s_ca_models_definitions['ca_data_importers'] = array(
@@ -216,8 +217,9 @@ class ca_data_importers extends BundlableLabelableBaseModelWithAttributes {
 	# ------------------------------------------------------
 	# $FIELDS contains information about each field in the table. The order in which the fields
 	# are listed here is the order in which they will be returned using getFields()
-
 	protected $FIELDS;
+	
+	use FileModelTrait;
 	
 	/**
 	 * Settings delegate - implements methods for setting, getting and using 'settings' var field

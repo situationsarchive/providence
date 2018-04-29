@@ -44,7 +44,7 @@
  			AssetLoadManager::register('tableList');
  			
  			$t_group = $this->getGroupObject();
-foreach($t_group->getFormFields() as $vs_f => $va_field_info) {
+			foreach($t_group->getFormFields() as $vs_f => $va_field_info) {
  				$t_group->set($vs_f, $_REQUEST[$vs_f]);
  				if ($t_group->numErrors()) {
  					$this->request->addActionErrors($t_group->errors(), 'field_'.$vs_f);
