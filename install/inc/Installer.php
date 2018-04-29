@@ -297,7 +297,7 @@ class Installer {
 	 * @return bool
 	 */
 	protected static function addLabelsFromXMLElement($t_instance,$po_labels, $pa_locales, $pb_force_preferred=false) {
-		require_once(__CA_LIB_DIR__."/ca/LabelableBaseModelWithAttributes.php");
+		require_once(__CA_LIB_DIR__."/LabelableBaseModelWithAttributes.php");
 
 		if(!($t_instance instanceof LabelableBaseModelWithAttributes)) {
 			return false;
