@@ -588,7 +588,7 @@ class ca_metadata_elements extends LabelableBaseModelWithAttributes implements I
                         }
                         $va_properties['options'] = $va_select_opts;
                     } 
-                } 
+                }
 
 				$vm_value = $this->getSetting($ps_setting);
 
@@ -603,7 +603,14 @@ class ca_metadata_elements extends LabelableBaseModelWithAttributes implements I
 				if (isset($va_properties['refreshOnChange']) && (bool)$va_properties['refreshOnChange']) {
 					$va_attr['onchange'] = "caSetElementsSettingsForm({ {$vs_input_name} : jQuery(this).val() }); return false;";
 				}
-				$vs_return .= caHTMLSelect($vs_input_name, $va_properties['options'], $va_attr, $va_opts);
+				
+				if($va_properties['useList']) {
+                	$t_list = new ca_lists($va_properties['useList']);
+					if(!isset($va_opts['value'])) { $va_opts['value'] = -1; }		// make sure default list item is never selected
+					$vs_return .= $t_list->getListAsHTMLFormElement($va_properties['useList'], $vs_input_name, $va_attr, $va_opts);
+                } else {
+					$vs_return .= caHTMLSelect($vs_input_name, $va_properties['options'], $va_attr, $va_opts);
+				}
 				break;
 			# --------------------------------------------
 			default:
@@ -720,7 +727,7 @@ class ca_metadata_elements extends LabelableBaseModelWithAttributes implements I
 	 * @return array A List of elements. Each list item is an array with keys set to field names; there is one additional value added with key "display_label" set to the display label of the element in the current locale
 	 */
 	public static function getElementsAsList($pb_root_elements_only=false, $pm_table_name_or_num=null, $pm_type_name_or_id=null, $pb_use_cache=true, $pb_return_stats=false, $pb_index_by_element_code=false, $pa_data_types=null){
-				$vn_table_num = Datamodel::getTableNum($pm_table_name_or_num);
+		$vn_table_num = Datamodel::getTableNum($pm_table_name_or_num);
 		$vs_cache_key = md5($vn_table_num.'/'.$pm_type_name_or_id.'/'.($pb_root_elements_only ? '1' : '0').'/'.($pb_index_by_element_code ? '1' : '0').serialize($pa_data_types));
 
 		if($pb_use_cache && CompositeCache::contains($vs_cache_key, 'ElementList')) {
@@ -854,7 +861,7 @@ class ca_metadata_elements extends LabelableBaseModelWithAttributes implements I
 	 * @return int The number of elements
 	 */
 	public static function getElementCount($pb_root_elements_only=false, $pm_table_name_or_num=null, $pm_type_name_or_id=null){
-				$vn_table_num = Datamodel::getTableNum($pm_table_name_or_num);
+		$vn_table_num = Datamodel::getTableNum($pm_table_name_or_num);
 
 		$vo_db = new Db();
 
@@ -1040,7 +1047,7 @@ class ca_metadata_elements extends LabelableBaseModelWithAttributes implements I
 		");
 
 		$va_counts_by_attribute = array();
-				while($qr_use_counts->nextRow()) {
+		while($qr_use_counts->nextRow()) {
 			if (preg_match('!^ca_attribute_([A-Za-z0-9_\-]+)$!', $qr_use_counts->get('bundle_name'), $va_matches)) {
 				if (!($t_table = Datamodel::getInstanceByTableNum($qr_use_counts->get('editor_type'), true))) { continue; }
 				$va_counts_by_attribute[$va_matches[1]][$t_table->getProperty('NAME_PLURAL')] = $qr_use_counts->get('c');
@@ -1085,7 +1092,7 @@ class ca_metadata_elements extends LabelableBaseModelWithAttributes implements I
 		");
 
 		$va_restrictions = array();
-				$t_list = new ca_lists();
+		$t_list = new ca_lists();
 		while($qr_restrictions->nextRow()) {
 			if (!($t_table = Datamodel::getInstanceByTableNum($qr_restrictions->get('table_num'), true))) { continue; }
 
@@ -1343,7 +1350,7 @@ class ca_metadata_elements extends LabelableBaseModelWithAttributes implements I
 		if (!is_array($pa_settings)) { $pa_settings = array(); }
 
 		$t_restriction = new ca_metadata_type_restrictions();
-$t_restriction->set('table_num', $pn_table_num);
+		$t_restriction->set('table_num', $pn_table_num);
 		$t_restriction->set('type_id', $pn_type_id);
 		$t_restriction->set('element_id', $this->getPrimaryKey());
 		foreach($pa_settings as $vs_setting => $vs_setting_value) {
