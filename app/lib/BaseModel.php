@@ -2079,14 +2079,14 @@ class BaseModel extends BaseObject {
 		$vn_hier_left_index_value = $vn_hier_right_index_value = 0;
 		if (($vb_is_hierarchical = $this->isHierarchical()) && (!isset($pa_options['dontSetHierarchicalIndexing']) || !$pa_options['dontSetHierarchicalIndexing'])) {
 			$vn_parent_id = $this->get($this->getProperty('HIERARCHY_PARENT_ID_FLD'));
-			$va_parent_info = $this->_getHierarchyParent($vn_parent_id);
+			$va_parent_info = $this->getHierarchyParent($vn_parent_id);
 			
 			switch($this->getHierarchyType()) {
 				case __CA_HIER_TYPE_SIMPLE_MONO__:	// you only need to set parent_id for this type of hierarchy
 					if (!$vn_parent_id) {
 						if ($vn_parent_id = $this->getHierarchyRootID(null)) {
 							$this->set($this->getProperty('HIERARCHY_PARENT_ID_FLD'), $vn_parent_id);
-							$va_parent_info = $this->_getHierarchyParent($vn_parent_id);
+							$va_parent_info = $this->getHierarchyParent($vn_parent_id);
 							$vn_fields_that_have_been_set++;
 						}
 					}
@@ -2098,7 +2098,7 @@ class BaseModel extends BaseObject {
 					if (!$vn_parent_id) {
 						if ($vn_parent_id = $this->getHierarchyRootID($vn_hierarchy_id)) {
 							$this->set($this->getProperty('HIERARCHY_PARENT_ID_FLD'), $vn_parent_id);
-							$va_parent_info = $this->_getHierarchyParent($vn_parent_id);
+							$va_parent_info = $this->getHierarchyParent($vn_parent_id);
 							$vn_fields_that_have_been_set++;
 						}
 					}
@@ -2124,7 +2124,7 @@ class BaseModel extends BaseObject {
 			}
 			
 			if ($va_parent_info) {
-				$va_hier_indexing = $this->_calcHierarchicalIndexing($va_parent_info);
+				$va_hier_indexing = $this->calculateHierarchicalIndexing($va_parent_info);
 			} else {
 				$va_hier_indexing = array('left' => 1, 'right' => pow(2,32));
 			}
@@ -2639,7 +2639,7 @@ class BaseModel extends BaseObject {
 			}
 				
 			if ($vb_parent_id_changed = $this->changed($vs_parent_id_fld)) {
-				$va_parent_info = $this->_getHierarchyParent($vn_parent_id);
+				$va_parent_info = $this->getHierarchyParent($vn_parent_id);
 				
 				if (!$pa_options['dontCheckCircularReferences']) {
 					$va_ids = $this->getHierarchyIDs($this->getPrimaryKey());
@@ -2710,7 +2710,7 @@ class BaseModel extends BaseObject {
 				
 if (!isset($pa_options['dontSetHierarchicalIndexing']) || !$pa_options['dontSetHierarchicalIndexing']) {							
 					if ($va_parent_info) {
-						$va_hier_indexing = $this->_calcHierarchicalIndexing($va_parent_info);
+						$va_hier_indexing = $this->calculateHierarchicalIndexing($va_parent_info);
 					} else {
 						$va_hier_indexing = array('left' => 1, 'right' => pow(2,32));
 					}

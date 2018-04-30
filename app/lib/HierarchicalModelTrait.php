@@ -1291,7 +1291,7 @@ trait HierarchicalModelTrait {
 	/**
 	 *
 	 */
-	 private function _calcHierarchicalIndexing($pa_parent_info) {
+	 protected function calculateHierarchicalIndexing($pa_parent_info) {
 	 	$vs_hier_left_fld = $this->getProperty('HIERARCHY_LEFT_INDEX_FLD');
 	 	$vs_hier_right_fld = $this->getProperty('HIERARCHY_RIGHT_INDEX_FLD');
 	 	$vs_hier_id_fld = $this->getProperty('HIERARCHY_ID_FLD');
@@ -1319,8 +1319,8 @@ trait HierarchicalModelTrait {
 			if ($vn_gap_size < 0.00001) {
 				// rebuild hierarchical index if the current gap is not large enough to fit current record
 				$this->rebuildHierarchicalIndex($this->get($vs_hier_id_fld));
-				$pa_parent_info = $this->_getHierarchyParent($pa_parent_info[$this->primaryKey()]);
-				return $this->_calcHierarchicalIndexing($pa_parent_info);
+				$pa_parent_info = $this->getHierarchyParent($pa_parent_info[$this->primaryKey()]);
+				return $this->calculateHierarchicalIndexing($pa_parent_info);
 			}
 
 			if (($vn_scale = strlen(floor($vn_gap_size/10000))) < 1) { $vn_scale = 1; } 
@@ -1340,7 +1340,7 @@ trait HierarchicalModelTrait {
 	 /**
 	  *
 	  */
-	 private function _getHierarchyParent($pn_parent_id) {
+	 protected function getHierarchyParent($pn_parent_id) {
 	 	$o_db = $this->getDb();
 	 	$qr_get_parent = $o_db->query("
 			SELECT *
