@@ -571,7 +571,7 @@ class ca_data_importers extends BundlableLabelableBaseModelWithAttributes {
 		if(!$this->getPrimaryKey()) return false;
 		
 		$t_group = new ca_data_importer_groups();
-$t_group->set('importer_id', $this->getPrimaryKey());
+		$t_group->set('importer_id', $this->getPrimaryKey());
 		$t_group->set('group_code', $ps_group_code);
 		$t_group->set('destination', $ps_destination);
 		
@@ -667,7 +667,7 @@ $t_group->set('importer_id', $this->getPrimaryKey());
 		}
 		
 		if($t_group->load($pn_group_id)){
-$t_group->removeItems();
+			$t_group->removeItems();
 			$t_group->delete();
 		} else {
 			return false;
@@ -689,7 +689,7 @@ $t_group->removeItems();
 		$t_group = new ca_data_importer_groups();
 		
 		if($t_group->load(array("code" => $ps_group_code))){
-$t_group->removeItems();
+			$t_group->removeItems();
 			$t_group->delete();
 		} else {
 			return false;
@@ -704,7 +704,7 @@ $t_group->removeItems();
 		}
 		
 		if($t_item->load($pn_item_id)){
-$t_item->delete();
+			$t_item->delete();
 		} else {
 			return false;
 		}
@@ -994,7 +994,7 @@ $t_item->delete();
 			$va_settings['inputFormats'] = array_values(ca_data_importers::getAvailableInputFormats());
 		}
 		
-				if (!($t_instance = Datamodel::getInstanceByTableName($va_settings['table']))) {
+		if (!($t_instance = Datamodel::getInstanceByTableName($va_settings['table']))) {
 			$pa_errors[] = _t("Mapping target table %1 is invalid\n", $va_settings['table']);
 			if ($o_log) {  $o_log->logError(_t("[loadImporterFromFile:%1] Mapping target table %2 is invalid\n", $ps_source, $va_settings['table'])); }
 			return;
@@ -1004,7 +1004,7 @@ $t_item->delete();
 		
 		
 		$t_importer = new ca_data_importers();
-// Remove any existing mapping
+		// Remove any existing mapping
 		if ($t_importer->load(array('importer_code' => $va_settings['code']))) {
 			$t_importer->delete(true, array('hard' => true));
 			if ($t_importer->numErrors()) {
@@ -1680,7 +1680,7 @@ $t_item->delete();
 			foreach($va_idnos_for_row as $vs_idno) {
 				$t_subject = Datamodel::getInstanceByTableNum($vn_table_num);
 				if ($o_trans) { $t_subject->setTransaction($o_trans); }
-// get preferred labels
+				// get preferred labels
 				$va_pref_label_values = array();
 				foreach($va_preferred_label_mapping_ids as $vn_preferred_label_mapping_id => $vs_preferred_label_mapping_fld) {
 					$vs_label_val = ca_data_importers::getValueFromSource($va_mapping_items[$vn_preferred_label_mapping_id], $o_reader, array('otherValues' => $va_rule_set_values, 'environment' => $va_environment, 'log' => $o_log, 'logIdno' => $vs_idno));
@@ -1775,7 +1775,7 @@ $t_item->delete();
 								));
 								if (is_array($va_ids) && (sizeof($va_ids) > 0)) {
 									$t_subject->load($va_ids[0]);
-$t_subject->delete(true, array('hard' => true));
+									$t_subject->delete(true, array('hard' => true));
 									if ($t_subject->numErrors()) {
 										ca_data_importers::logImportError(_t('[%1] Could not delete existing record matched on identifier by policy %2', $vs_idno, $vs_existing_record_policy));
 										// Don't stop?
@@ -1794,7 +1794,7 @@ $t_subject->delete(true, array('hard' => true));
 							));
 							if (is_array($va_ids) && (sizeof($va_ids) > 0)) {
 								$t_subject->load($va_ids[0]);
-$t_subject->delete(true, array('hard' => true));
+								$t_subject->delete(true, array('hard' => true));
 							
 								if ($t_subject->numErrors()) {
 									ca_data_importers::logImportError(_t('[%1] Could not delete existing record matched on label by policy %2', $vs_idno, $vs_existing_record_policy));
@@ -1871,7 +1871,37 @@ $t_subject->delete(true, array('hard' => true));
 								$o_log->logInfo(_t('[%1] Skipped mapping because value for %2 is empty', $vs_idno, $va_item['destination']));
 								continue(2);
 							}
+							if ($va_item['settings']['skipIfValue'] && !is_array($va_item['settings']['skipIfValue'])) { $va_item['settings']['skipIfValue'] = array($va_item['settings']['skipIfValue']); }
+							if (isset($va_item['settings']['skipIfValue']) && is_array($va_item['settings']['skipIfValue']) && strlen($vm_val) && in_array($vm_val, $va_item['settings']['skipIfValue'])) {
+								$o_log->logInfo(_t('[%1] Skipped mapping %2 because value for %3 matches value %4', $vs_idno, $vn_row, $vs_item_terminal, $vm_val));
+								continue(2);
+							}
+							if ($va_item['settings']['skipIfNotValue'] && !is_array($va_item['settings']['skipIfNotValue'])) { $va_item['settings']['skipIfNotValue'] = array($va_item['settings']['skipIfNotValue']); }
+							if (isset($va_item['settings']['skipIfNotValue']) && is_array($va_item['settings']['skipIfNotValue']) && strlen($vm_val) && !in_array($vm_val, $va_item['settings']['skipIfNotValue'])) {
+								$o_log->logInfo(_t('[%1] Skipped mapping %2 because value %4 for %3 is not in list of values', $vs_idno, $vn_row, $vs_item_terminal, $vm_val));
+								continue(2);
+							}
+							if ($va_item['settings']['skipRowIfValue'] && !is_array($va_item['settings']['skipRowIfValue'])) { $va_item['settings']['skipRowIfValue'] = array($va_item['settings']['skipRowIfValue']); }
+							if (isset($va_item['settings']['skipRowIfValue']) && is_array($va_item['settings']['skipRowIfValue']) && strlen($vm_val) && in_array($vm_val, $va_item['settings']['skipRowIfValue'])) {
+								$o_log->logInfo(_t('[%1] Skipped row %2 because value for %3 in group %4 matches value %5', $vs_idno, $vn_row, $vs_item_terminal, $vn_group_id, $vm_val));
+								continue(4);
+							}
+							if ($va_item['settings']['skipRowIfNotValue'] && !is_array($va_item['settings']['skipRowIfNotValue'])) { $va_item['settings']['skipRowIfNotValue'] = array($va_item['settings']['skipRowIfNotValue']); }
+							if (isset($va_item['settings']['skipRowIfNotValue']) && is_array($va_item['settings']['skipRowIfNotValue']) && strlen($vm_val) && !in_array($vm_val, $va_item['settings']['skipRowIfNotValue'])) {
+								$o_log->logInfo(_t('[%1] Skipped row %2 because value for %3 in group %4 is not in list of values', $vs_idno, $vn_row, $vs_item_terminal, $vn_group_id, $vm_val));
+								continue(4);
+							}
+							if ($va_item['settings']['skipGroupIfValue'] && !is_array($va_item['settings']['skipGroupIfValue'])) { $va_item['settings']['skipGroupIfValue'] = array($va_item['settings']['skipGroupIfValue']); }
+							if (isset($va_item['settings']['skipGroupIfValue']) && is_array($va_item['settings']['skipGroupIfValue']) && strlen($vm_val) && in_array($vm_val, $va_item['settings']['skipGroupIfValue'])) {
+								$o_log->logInfo(_t('[%1] Skipped group %2 because value for %3 matches value %4', $vs_idno, $vn_group_id, $vs_item_terminal, $vm_val));
+								continue(3);
+							}
 						
+							if ($va_item['settings']['skipGroupIfNotValue'] && !is_array($va_item['settings']['skipGroupIfNotValue'])) { $va_item['settings']['skipGroupIfNotValue'] = array($va_item['settings']['skipGroupIfNotValue']); }
+							if (isset($va_item['settings']['skipGroupIfNotValue']) && is_array($va_item['settings']['skipGroupIfNotValue']) && strlen($vm_val) && !in_array($vm_val, $va_item['settings']['skipGroupIfNotValue'])) {
+								$o_log->logInfo(_t('[%1] Skipped group %2 because value for %3 matches is not in list of values', $vs_idno, $vn_group_id, $vs_item_terminal));
+								continue(3);
+							}
 						
 							if (isset($va_item['settings']['default']) && strlen($va_item['settings']['default']) && !strlen($vm_val)) {
 								$vm_val = $va_item['settings']['default'];
@@ -2315,7 +2345,7 @@ $t_subject->set($vs_type_id_fld, $vs_type);
 				} else {
 					$o_event->beginItem($vn_row, $t_subject->tableNum(), 'U') ;
 					// update
-if ($vn_idno_mapping_item_id || !$t_subject->get($vs_idno_fld)) {
+					if ($vn_idno_mapping_item_id || !$t_subject->get($vs_idno_fld)) {
 						if ($vb_idno_is_template) {
 							$t_subject->setIdnoWithTemplate($vs_idno);
 						} else {
@@ -2432,7 +2462,7 @@ if ($vn_idno_mapping_item_id || !$t_subject->get($vs_idno_fld)) {
 									}
 								
 									$t_subject->clearErrors();
-switch($vs_element) {
+									switch($vs_element) {
 										case 'preferred_labels':
 											if (!$vb_was_preferred_label_match) {
 												if (
