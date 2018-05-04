@@ -3166,7 +3166,7 @@ if (!$vb_batch) {
 				// do inserts
 				foreach($va_attributes_to_insert as $va_attribute_to_insert) {
 					$this->clearErrors();
-					$this->addAttribute($va_attribute_to_insert, $vn_element_id, $vs_f);
+					$this->addAttribute($va_attribute_to_insert, $vn_element_id, $vs_f, ['batch' => $vb_batch]);
 				}
 				
 if (!$vb_batch) {					
@@ -3220,7 +3220,7 @@ if (!$vb_batch) {
 						}
 						
 						$this->clearErrors();
-						$this->editAttribute($vn_attribute_id, $vn_element_set_id, $va_attr_update, $vs_f);
+						$this->editAttribute($vn_attribute_id, $vn_element_set_id, $va_attr_update, $vs_f, ['batch' => $vb_batch]);
 					}
 				}
 			}

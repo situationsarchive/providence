@@ -323,7 +323,7 @@ class ca_attribute_values extends BaseModel {
 		
 	
 			if (!$this->numErrors()) {
-				return $this->insert();
+				return $this->insert($pa_options);
 			} else {
 				return false;
 			}
@@ -350,7 +350,7 @@ class ca_attribute_values extends BaseModel {
 		$t_element = ca_attributes::getElementInstance($this->get('element_id'));
 		$pa_element_info = $t_element->getFieldValuesArray();
 		
-$o_attr_value = Attribute::getValueInstance($t_element->get('datatype'));
+		$o_attr_value = Attribute::getValueInstance($t_element->get('datatype'));
 		$pa_element_info['displayLabel'] = $t_element->getLabelForDisplay(false);
 		$va_values = $o_attr_value->parseValue($ps_value, $pa_element_info, $pa_options);
 		if (isset($va_values['_dont_save']) && $va_values['_dont_save']) { return true; }
@@ -489,7 +489,7 @@ $o_attr_value = Attribute::getValueInstance($t_element->get('datatype'));
  				return null;
  			}
  		}
-$t_multifile->set('value_id', $this->getPrimaryKey());
+		$t_multifile->set('value_id', $this->getPrimaryKey());
  		$t_multifile->set('media', $ps_filepath);
  		$t_multifile->set('resource_path', $ps_resource_path);
  		
@@ -512,7 +512,7 @@ $t_multifile->set('value_id', $this->getPrimaryKey());
  		$t_multifile = new ca_attribute_value_multifiles($pn_multifile_id);
  		
  		if ($t_multifile->get('value_id') == $this->getPrimaryKey()) {
-$t_multifile->delete();
+			$t_multifile->delete();
  			
 			if ($t_multifile->numErrors()) {
 				$this->errors = array_merge($this->errors, $t_multifile->errors);

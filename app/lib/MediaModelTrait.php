@@ -779,12 +779,17 @@ $this->update();
 						if(strlen($va_matches[1])>0){
 							$va_parts = explode("/",$this->_SET_FILES[$ps_field]['tmp_name']);
 							$vs_new_filename = sys_get_temp_dir()."/".$va_parts[sizeof($va_parts)-1].".".$va_matches[1];
-							if (!move_uploaded_file($this->_SET_FILES[$ps_field]['tmp_name'],$vs_new_filename)) {
-								rename($this->_SET_FILES[$ps_field]['tmp_name'],$vs_new_filename);
-							}
+							if (caGetOption('batch', $pa_options, false)) {
+							    copy($this->_SET_FILES[$ps_field]['tmp_name'],$vs_new_filename);
+							} else {
+                                if (!move_uploaded_file($this->_SET_FILES[$ps_field]['tmp_name'],$vs_new_filename)) {
+                                    rename($this->_SET_FILES[$ps_field]['tmp_name'],$vs_new_filename);
+                                }
+                            }
 							$this->_SET_FILES[$ps_field]['tmp_name'] = $vs_new_filename;
 							$vb_renamed_tmpfile = true;
 						}
+						
 					}
 				
 					$input_mimetype = $m->divineFileFormat($this->_SET_FILES[$ps_field]['tmp_name']);

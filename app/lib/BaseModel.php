@@ -2439,7 +2439,7 @@ class BaseModel extends BaseObject {
 					$vs_sql  = "";
 					if (sizeof($va_media_fields) > 0) {
 						foreach($va_media_fields as $f) {
-							if($vs_msql = $this->_processMedia($f, array('delete_old_media' => false))) {
+							if($vs_msql = $this->_processMedia($f, array('delete_old_media' => false, 'batch' => caGetOption('batch', $pa_options, false)))) {
 								$vs_sql .= $vs_msql;
 							}
 						}
@@ -2942,7 +2942,7 @@ if (!isset($pa_options['dontSetHierarchicalIndexing']) || !$pa_options['dontSetH
 					case (FT_MEDIA):
 						$va_limit_to_versions = caGetOption("updateOnlyMediaVersions", $pa_options, null);
 						
-						if ($vs_media_sql = $this->_processMedia($vs_field, array('processingMediaForReplication' => caGetOption('processingMediaForReplication', $pa_options, false), 'these_versions_only' => $va_limit_to_versions))) {
+						if ($vs_media_sql = $this->_processMedia($vs_field, array('processingMediaForReplication' => caGetOption('processingMediaForReplication', $pa_options, false), 'these_versions_only' => $va_limit_to_versions, 'batch' => caGetOption('batch', $pa_options, false)))) {
 							$vs_sql .= $vs_media_sql;
 							$vn_fields_that_have_been_set++;
 						} else {

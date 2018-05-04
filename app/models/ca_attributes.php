@@ -253,7 +253,7 @@ class ca_attributes extends BaseModel {
 		$this->set('table_num', $pn_table_num);
 		$this->set('row_id', $pn_row_id);
 		
-$this->insert();
+		$this->insert($pa_options);
 		
 		if ($this->numErrors()) {
 			if ($vb_web_set_transaction) {
@@ -364,7 +364,7 @@ $vn_attribute_id = $this->getPrimaryKey();
 		$t_attr_val = new ca_attribute_values();
 		$t_attr_val->purify($this->purify());
 		$t_attr_val->setTransaction($o_trans);
-$t_element = ca_attributes::getElementInstance($this->get('element_id'));
+		$t_element = ca_attributes::getElementInstance($this->get('element_id'));
 		$va_elements = $t_element->getElementsInSet();
 
 		$va_attr_vals = $this->getAttributeValues();
@@ -430,7 +430,7 @@ $t_element = ca_attributes::getElementInstance($this->get('element_id'));
 	 */
 	public function removeAttribute() {
 		if (!$this->getPrimaryKey()) { return null; }
-unset(ca_attributes::$s_get_attributes_cache[$this->get('table_num').'/'.$this->get('row_id')]);
+		unset(ca_attributes::$s_get_attributes_cache[$this->get('table_num').'/'.$this->get('row_id')]);
 		$vn_rc= $this->delete(true);
 		
 		if ($this->numErrors()) {
@@ -923,7 +923,7 @@ unset(ca_attributes::$s_get_attributes_cache[$this->get('table_num').'/'.$this->
 	public function getRowInstance() {
 		if(!$this->getPrimaryKey()) { return false; }
 
-                if (($t_instance = Datamodel::getInstanceByTableNum($this->get('table_num'), true)) && ($t_instance->load($this->get('row_id')))) {
+            if (($t_instance = Datamodel::getInstanceByTableNum($this->get('table_num'), true)) && ($t_instance->load($this->get('row_id')))) {
             return $t_instance;
         }
         
@@ -984,7 +984,7 @@ unset(ca_attributes::$s_get_attributes_cache[$this->get('table_num').'/'.$this->
             WHERE cav.value_id = ?
         ", [(int)$pn_value_id]);
         
-                while($qr_res->nextRow()) {
+        while($qr_res->nextRow()) {
             if (($t_instance = Datamodel::getInstanceByTableNum($qr_res->get('table_num'), true)) && ($t_instance->load($qr_res->get('row_id')))) {
                 return $t_instance;
             }
