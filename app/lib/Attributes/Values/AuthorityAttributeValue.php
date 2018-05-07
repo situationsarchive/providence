@@ -220,7 +220,7 @@ abstract class AuthorityAttributeValue extends AttributeValue {
 		$vs_class = trim((isset($pa_options['class']) && $pa_options['class']) ? $pa_options['class'] : 'lookupBg');
 
 		if ($pa_options['request']) {
-			if($va_restrict_to_types = array_filter(caGetOption('restrictToTypes', $va_settings, []), function($v) { return strlen($v); })) { 
+			if($va_restrict_to_types = array_filter(caGetOption('restrictToTypes', $va_settings, [], ['castTo' => 'array']), function($v) { return strlen($v); })) { 
 				$va_params = array('max' => 50, 'types' => join(";", $va_restrict_to_types));
 			} elseif($vs_restrict_to_type = caGetOption('restrictTo'.$this->ops_name_singular.'TypeIdno', $pa_element_info['settings'], null)) {
 				$va_params = array('max' => 50, 'type' => $vs_restrict_to_type);
@@ -301,7 +301,7 @@ abstract class AuthorityAttributeValue extends AttributeValue {
 	 * @return BaseModel A table instance or null if the datatype number is not an authority attribute datatype.
 	 */
 	public static function elementTypeToInstance($pn_type) {
-				switch($pn_type) {
+		switch($pn_type) {
 			case __CA_ATTRIBUTE_VALUE_LIST__:
 				return Datamodel::getInstanceByTableName('ca_list_items', true);
 				break;
@@ -347,8 +347,7 @@ abstract class AuthorityAttributeValue extends AttributeValue {
 	 * @return int An attribute datatype number or null if the table does not have an associated attribute type
 	 */
 	public static function tableToElementType($pm_table_name_or_num) {
-				$vs_table = Datamodel::getTableName($pm_table_name_or_num);
-		switch($vs_table) {
+		switch($vs_table = Datamodel::getTableName($pm_table_name_or_num)) {
 			case 'ca_list_items':
 				require_once(__CA_LIB_DIR__."/Attributes/Values/ListAttributeValue.php");
 				return __CA_ATTRIBUTE_VALUE_LIST__;
